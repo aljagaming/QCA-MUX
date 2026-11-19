@@ -9,6 +9,6 @@ rm "$file_name.ps"
 
 pdfcrop "$file_name.pdf" "$file_name.pdf"
 
-pdftoppm -png -r 1200 "$file_name.pdf" "$file_name"
+pdftoppm -png -r 2400 "$file_name.pdf" "$file_name"
 
 rm "$file_name.pdf"
