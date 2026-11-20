@@ -156,19 +156,98 @@ Sliki~\ref{g25:fig:majority}b in~\ref{g25:fig:majority}c prikazujeta, kako isto 
 \section{Metode}
 \label{g25:sec:metode}
 
-\subsection{Orodje in začetni parametri simulacije}
-\label{g25:sec:orodja}
-QCADesigner-E: velikost celice, razdalja med celicami, radij vpliva
-(angl.~\emph{radius of effect}), ostali parametri (tabela).
-
 \subsection{Zasnova poskusov}
 \label{g25:sec:poskusi}
-Ponovna izdelava vezij iz članka, vhodni vektorji, primerjava z objavljenimi
-rezultati, nato lastna nadgradnja na 16:1.
 
+Poskuse smo izvedli v več korakih. Najprej smo v orodju QCADesigner-E izdelali reverzibilne multiplekserje 2:1, 4:1 in 8:1. Pri njihovi izdelavi smo uporabili osnovne gradnike, opisane v razdelku~\ref{g25:sec:gradniki}, ter parametre simulacije, navedene v razdelku~\ref{g25:sec:orodja}.
+
+Pravilnost delovanja posameznega vezja smo preverili s simulacijo vseh kombinacij vhodnih signalov. Dobljene izhodne vrednosti smo primerjali s pričakovanimi vrednostmi, nato pa še z rezultati, objavljenimi v članku. Pri primerjavi smo upoštevali metrike, predstavljene v razdelku~\ref{g25:sec:metrike}.
+
+Na podlagi preverjenih zasnov smo nato razvili še lastno izvedbo reverzibilnega multiplekserja 16:1. Pri tem smo uporabili hierarhično povezovanje manjših multiplekserjev, podrobneje predstavljeno v razdelku~\ref{g25:sec:mux16}.
+ 
+\subsection{Orodje in začetni parametri simulacije}
+\label{g25:sec:orodja}
+
+Za načrtovanje, izdelavo in simulacijo multiplekserjev smo uporabili orodje QCADesigner-E. V njem smo izdelali posamezne gradnike ter celotna vezja multiplekserjev. Za uporabo tega orodja smo se odločili, ker je QCADesigner uveljavljeno orodje za načrtovanje in simulacijo vezij na osnovi kvantnih celičnih avtomatov. Njegova razširjena različica QCADesigner-E omogoča uporabo energijskega simulacijskega modela, ki omogoča podrobnejšo analizo delovanja vezij in njihovega odziva med simulacijo.
+
+Začetne tehnološke in simulacijske parametre smo prevzeli iz članka \cite{alharbi2024}. Uporabljene vrednosti tehnoloških parametrov in parametrov simulacije so predstavljene v tabeli \ref{tab:parametri}.
+
+
+\begin{table}[htbp]
+    \centering
+    \scriptsize
+    
+    \begin{subtable}[t]{0.48\textwidth}
+        \centering
+        \caption{Tehnološki parametri}
+        \label{tab:tehnoloski}
+        \begin{tabular}{lll}
+            \toprule
+            Parameter & Opis & Vrednost \\
+            \midrule
+            QD size & Velikost kvantne pike & 5 nm \\
+            Cell area & Dimenzije celice & $18 \times 18$ nm \\
+            Cell distance & Razdalja med celicama & 2 nm \\
+            Layer separation & Razdalja med plastmi & 11,5 nm \\
+            Clock high & Največja energija ure & $9,8 \times 10^{-22}$ J \\
+            Clock low & Najmanjša energija ure & $3,8 \times 10^{-23}$ J \\
+            Relative permittivity & Relativna permitivnost & 12,9 \\
+            Radius of effect & Radij interakcije & 80 nm \\
+            Temp & Delovna temperatura & 1 K \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+    % \hspace{0.02\textwidth}
+    \hfill
+    \begin{subtable}[t]{0.48\textwidth}
+        \centering
+        \caption{Simulacijski parametri}
+        \label{tab:simulacijski}
+        \begin{tabular}{lll}
+            \toprule
+            Parameter & Opis & Vrednost \\
+            \midrule
+            $\tau$ & Relaksacijski čas & $1 \times 10^{-15}$ s \\
+            $T_{\gamma}$ & Period ure & $1 \times 10^{-9}$ s \\
+            $T_{in}$ & Period vhodnih signalov & $1 \times 10^{-9}$ s \\
+            $T_{step}$ & Časovni korak & $1 \times 10^{-16}$ s \\
+            $T_{sim}$ & Čas simulacije & $8 \times 10^{-9}$ s \\
+            $\gamma_{shape}$ & Oblika signalov ure & Gaussova \\
+            $\gamma_{slope}$ & Čas vzpona in padca & $1 \times 10^{-10}$ s \\
+            & & \\
+            & & \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+    \caption{Uporabljeni tehnološki in simulacijski parametri.}
+    \label{tab:parametri}
+\end{table}
+ 
 \subsection{Metrike}
 \label{g25:sec:metrike}
-Površina, število celic, časovna zakasnitev (angl.~\emph{clock delay}).
+
+Za vrednotenje in primerjavo izdelanih multiplekserjev smo izbrali več metrik, ki omogočajo analizo njihove kompleksnosti, prostorske zahtevnosti, časovnega delovanja in \colorbox{yellow}{energijske učinkovitosti.}
+
+Pri primerjavi smo upoštevali naslednje metrike:
+
+\begin{itemize}
+    \item \textit{Število celic:} predstavlja skupno število kvantnih celičnih avtomatov (QCA), uporabljenih za izdelavo posameznega vezja.
+
+    \item \textit{Površina vezja ($\mu m^2$):} predstavlja skupno površino, ki jo zavzema posamezno vezje.
+
+    \item \textit{Perioda ure:} predstavlja čas trajanja ene periode urnega signala, ki določa časovno organizacijo delovanja vezja.
+
+    \item \textit{Zakasnitev (število ciklov ure):} predstavlja število ciklov urnega signala, potrebnih za prenos vhodnega signala skozi vezje in pojav ustrezne vrednosti na izhodu.
+
+    \item \textit{
+        \colorbox{yellow}{
+            Skupna energijska disipacija (meV):}} predstavlja skupno količino energije, ki se med delovanjem vezja disipira.
+    \item \textit{
+        \colorbox{yellow}{
+        Povprečna energijska disipacija (meV):}} predstavlja povprečno količino energije, ki se disipira med delovanjem vezja v izbranem simulacijskem obdobju.
+\end{itemize}
+
+Na podlagi navedenih metrik smo primerjali posamezne izvedbe multiplekserjev in ovrednotili razlike med dobljenimi rezultati ter rezultati, predstavljenimi v izbranem članku.
 
 \section{Zaporedna gradnja multiplekserjev}
 \label{g25:sec:gradnja}
@@ -195,7 +274,7 @@ Zasnova, razlike glede na 8:1; lastnosti, zakasnitev.
 \subsection{Primerjava z objavljenimi rezultati}
 \label{g25:sec:primerjava}
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \caption{Primerjava naših rezultatov z rezultati iz članka~\cite{alharbi2024}.}
 \label{g25:tab:primerjava}
@@ -241,3 +320,4 @@ Površina, zakasnitev, število celic.
 %%%%%%%%%%%%%%%%%%%%%
 
 \end{document}
+
