@@ -172,25 +172,159 @@ Površina, število celic, časovna zakasnitev (angl.~\emph{clock delay}).
 
 \section{Zaporedna gradnja multiplekserjev}
 \label{g25:sec:gradnja}
+V tem razdelku multiplekserje gradimo zaporedno, od najmanjšega do največjega. Vsak naslednji multiplekser je sestavljen iz gradnikov prejšnje stopnje: multiplekser 2:1 iz reverzibilnih vrat AND in OR ter negatorja (razdelek~\ref{g25:sec:mux2}), multiplekser 4:1 iz treh multiplekserjev 2:1 (razdelek~\ref{g25:sec:mux4}), multiplekser 8:1 iz dveh multiplekserjev 4:1 in enega multiplekserja 2:1 (razdelek~\ref{g25:sec:mux8}) ter multiplekser 16:1 iz dveh multiplekserjev 8:1 in enega multiplekserja 2:1 (razdelek~\ref{g25:sec:mux16}).
+
+Pri vsakem koraku se število podatkovnih vhodov podvoji, doda pa se en izbirni vhod. Multiplekser z $n$ izbirnimi vhodi ima torej $2^n$ podatkovnih vhodov in vsebuje $2^n-1$ multiplekserjev 2:1. Vsi gradniki so reverzibilni, zato se vsi vhodi ohranijo v obliki kopij, odvečni izhodi pa so označeni z $g$.
+
+Pri 2:1, 4:1 in 8:1 sledimo vezjem iz članka~\cite{alharbi2024}, 16:1 pa je naša nadgradnja. Za vsako vezje navedemo zgradbo, vhode in izhode ter osnovne lastnosti.
+
 
 \subsection{Reverzibilni multiplekser 2:1}
 \label{g25:sec:mux2}
-Zgradba iz gradnikov (razdelek~\ref{g25:sec:gradniki}), lastnosti, zakasnitev.
+Reverzibilni multiplekser 2:1 je osnovni gradnik vseh večjih multiplekserjev. Sestavljajo ga dvoje reverzibilnih vrat AND, ena reverzibilna vrata OR in en negator z eno vejo (slika~\ref{g25:fig:mux2}).
+
+Vezje ima tri vhode: podatka $A$ in $B$ ter izbirni vhod $S$. Izhod podaja funkcija
+\begin{equation}
+    \mathrm{Mux} = (\overline{S} \cdot A) + (S \cdot B),
+\end{equation}
+torej je pri $S=0$ na izhodu $A$, pri $S=1$ pa $B$. Zaradi reverzibilnosti se vhodi ohranijo v obliki kopij $A_\mathrm{cp}$, $B_\mathrm{cp}$, $S_\mathrm{cp}$ in $S'_\mathrm{cp}$, poleg njih pa sta prisotna še odvečna izhoda $g_1$ in $g_2$. Po članku~\cite{alharbi2024} vezje vsebuje 56 celic, zavzame \SI{0,09}{\micro\metre\squared} in ima zakasnitev štirih urinih območij, kar ustreza eni urini periodi.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.50\textwidth}
+    \centering
+    \raisebox{0cm}{\includegraphics[width=\linewidth]{CIRCUITMux2_1}}
+    \caption{}
+    \label{g25:fig:mux2:a}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.40\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{mux2_1-1}
+    \caption{}
+    \label{g25:fig:mux2:b}
+\end{subfigure}
+
+\caption{a) Shema reverzibilnega multiplekserja 2:1. b) Postavitev celic reverzibilnega multiplekserja 2:1}
+\label{g25:fig:mux2}
+\end{figure}
 
 \subsection{Reverzibilni multiplekser 4:1}
 \label{g25:sec:mux4}
-Kako uporabimo vezje 2:1; lastnosti, zakasnitev.
+
+Reverzibilni multiplekser 4:1 je sestavljen iz treh multiplekserjev 2:1 iz prejšnjega razdelka (slika~\ref{g25:fig:mux4}). Na prvi stopnji dva multiplekserja 2:1, ki ju krmili isti izbirni vhod $S0$, izbereta med paroma $A$, $B$ ter $C$, $D$. Na drugi stopnji tretji multiplekser 2:1 z izbirnim vhodom $S1$ izbere med njunima izhodoma.
+
+Vezje ima štiri podatkovne vhode $A$, $B$, $C$ in $D$ ter dva izbirna vhoda $S0$ in $S1$. Izhod podaja funkcija
+\begin{equation}
+    \mathrm{Mux} = \big(\overline{S1} \cdot (\overline{S0}\cdot A + S0 \cdot B)\big) + \big(S1 \cdot (\overline{S0}\cdot C + S0 \cdot D)\big),
+\end{equation}
+pri čemer kombinacije $S1S0 = 00, 01, 10, 11$ po vrsti izberejo $A$, $B$, $C$ in $D$. Vhodi se ohranijo v obliki kopij ($A_\mathrm{cp}$ do $D_\mathrm{cp}$, $S0_\mathrm{cp}$, $S1_\mathrm{cp}$, $S0'_\mathrm{cp}$ in $S1'_\mathrm{cp}$), odvečni izhodi pa so označeni z $g$. Po članku~\cite{alharbi2024} vezje vsebuje 213 celic, zavzame \SI{0,46}{\micro\metre\squared} in ima zakasnitev 12 urinih območij, kar ustreza trem urinim periodam.
+
+
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.50\textwidth}
+    \centering
+    \raisebox{.1cm}{\includegraphics[width=\linewidth]{CIRCUITMux4_1}}
+    \caption{}
+    \label{g25:fig:mux4:a}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.40\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{mux4_1-1}
+    \caption{}
+    \label{g25:fig:mux4:b}
+\end{subfigure}
+
+\caption{a) Shema reverzibilnega multiplekserja 4:1. b) Postavitev celic reverzibilnega multiplekserja 4:1}
+\label{g25:fig:mux4}
+\end{figure}
+
+
+
+
 
 \subsection{Reverzibilni multiplekser 8:1}
 \label{g25:sec:mux8}
-Kako uporabimo vezji 2:1 in 4:1; lastnosti, zakasnitev.
+
+
+Reverzibilni multiplekser 8:1 zgradimo iz dveh multiplekserjev 4:1 in enega dodatnega multiplekserja 2:1 (slika~\ref{g25:fig:mux8}). Prvi multiplekser 4:1 izbira med vhodi $A$ do $D$, drugi med vhodi $E$ do $H$, oba pa krmilita isti izbirni vhoda $S0$ in $S1$. Multiplekser 2:1 z izbirnim vhodom $S2$ nato izbere med njunima izhodoma. Skupaj vezje vsebuje sedem multiplekserjev 2:1, ki so razporejeni v tri stopnje.
+
+Vezje ima osem podatkovnih vhodov od $A$ do $H$ ter tri izbirne vhode $S0$, $S1$ in $S2$. Kombinacija $S2S1S0$ določi, kateri vhod se prenese na izhod $\mathrm{Mux}$; na primer $S2S1S0=000$ izbere $A$, $S2S1S0=111$ pa $H$. Vhodi se ohranijo v obliki kopij ($A_\mathrm{cp}$ do $H_\mathrm{cp}$, $S0_\mathrm{cp}$, $S1_\mathrm{cp}$, $S2_\mathrm{cp}$ in njihovih negiranih kopij), odvečni izhodi so označeni z $g$. Po članku~\cite{alharbi2024} vezje vsebuje 646 celic, zavzame \SI{1,36}{\micro\metre\squared} in ima zakasnitev 22 urinih območij, kar ustreza 5,5 urine periode. Uporabljenih je 7 negatorjev, 14 vrat AND in 7 vrat OR.
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.50\textwidth}
+    \centering
+    \raisebox{1.2cm}{\includegraphics[width=\linewidth]{CIRCUITMux8_1}}
+    \caption{}
+    \label{g25:fig:mux8:a}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.40\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{mux8_1-1}
+    \caption{}
+    \label{g25:fig:mux8:b}
+\end{subfigure}
+
+\caption{a) Shema reverzibilnega multiplekserja 8:1. b) Postavitev celic reverzibilnega multiplekserja 8:1}
+\label{g25:fig:mux8}
+\end{figure}
+
+
+
 
 \subsection{Reverzibilni multiplekser 16:1 (naša nadgradnja)}
 \label{g25:sec:mux16}
-Zasnova, razlike glede na 8:1; lastnosti, zakasnitev.
+
+
+Reverzibilni multiplekser 16:1 je naša nadgradnja zasnove iz članka. Zgradimo ga na enak način kot 8:1, le da kot gradnik uporabimo multiplekser 8:1: sestavljen je iz dveh multiplekserjev 8:1 in enega dodatnega multiplekserja 2:1 (slika~\ref{g25:fig:mux16}). Prvi multiplekser 8:1 izbira med vhodi $A$ do $H$, drugi med vhodi $I$ do $P$, oba pa krmilita isti izbirni vhodi $S0$, $S1$ in $S2$. Multiplekser 2:1 z izbirnim vhodom $S3$ nato izbere med njunima izhodoma. Vezje je torej sestavljeno iz dveh multiplekserjev 8:1 (skupaj 14 multiplekserjev 2:1) in enega multiplekserja 2:1, to je iz petnajstih multiplekserjev 2:1.
+
+Vezje ima šestnajst podatkovnih vhodov od $A$ do $P$ ter štiri izbirne vhode od $S0$ do $S3$. Kombinacija $S3S2S1S0$ določi, kateri vhod se prenese na izhod $\mathrm{Mux}$; na primer $S3S2S1S0=0000$ izbere $A$, $1111$ pa $P$. Vhodi se ohranijo v obliki kopij ($A_\mathrm{cp}$ do $P_\mathrm{cp}$, $S0_\mathrm{cp}$ do $S3_\mathrm{cp}$ ter $S0'_\mathrm{cp}$ do $S3'_\mathrm{cp}$), odvečni izhodi so označeni z $g$. Vezje uporablja 15 negatorjev, 30 vrat AND in 15 vrat OR.
+
+Pri 16:1 se izbirni signali $S0$, $S1$ in $S2$ razvejijo na oba multiplekserja 8:1, signal $S3$ pa mora priti do končnega multiplekserja 2:1. Te poti neizogibno sekajo druge vodnike, zato vseh izbirnih vhodov ni mogoče povezati v eni plasti. Podobno kot v članku~\cite{alharbi2024} smo zato del celic, ki prenašajo izbirne signale, postavili na dodatno plast, s čimer smo povezali vse izbirne vhode, ne da bi se signali med seboj motili.
+
+Število celic, površino in zakasnitev določimo s simulacijo (razdelek~\ref{g25:sec:lastnosti16}).
+
+
+
+
+
+
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.50\textwidth}
+    \centering
+    \setbox0=\hbox{\includegraphics[width=0.40\textwidth]{mux8_1-1}}%     slika celic (desno)
+    \setbox2=\hbox{\includegraphics[width=\linewidth]{CIRCUITMux16_1}}%   shema (levo)
+    \raisebox{1.2cm}{\includegraphics[width=\linewidth]{CIRCUITMux16_1}}
+    \caption{}
+    \label{g25:fig:mux16:a}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.40\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Donkey}
+    \caption{}
+    \label{g25:fig:mux16:b}
+\end{subfigure}
+
+\caption{a) Shema reverzibilnega multiplekserja 16:1. b) Postavitev celic reverzibilnega multiplekserja 16:1}
+\label{g25:fig:mux16}
+\end{figure}
+
+
+
 
 \section{Rezultati}
 \label{g25:sec:rezultati}
+
 
 \subsection{Primerjava z objavljenimi rezultati}
 \label{g25:sec:primerjava}
@@ -208,6 +342,8 @@ Vezje & Št.~celic & Površina & Zakasnitev & Vir \\
 4:1  & [ ] & [ ] & [ ] & članek \\
      & [ ] & [ ] & [ ] & naši \\
 8:1  & [ ] & [ ] & [ ] & članek \\
+     & [ ] & [ ] & [ ] & naši \\
+16:1  & [ ] & [ ] & [ ] & članek \\
      & [ ] & [ ] & [ ] & naši \\
 \bottomrule
 \end{tabular}
@@ -234,8 +370,8 @@ Površina, zakasnitev, število celic.
 
 %%%% KRAJ MOJE KODE %%%%
 
+\newpage
 %%%% ZA BRISANJE %%%%
-\backmatter
 \bibliographystyle{unsrtnat}   % izpise tudi DOI in URL
 \bibliography{references}
 %%%%%%%%%%%%%%%%%%%%%
