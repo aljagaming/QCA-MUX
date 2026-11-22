@@ -93,7 +93,7 @@ z rezultati, objavljenimi v članku \cite{alharbi2024}, ob predvidenih minimalni
 delujoč multiplekser 16:1 z ocenjenimi lastnostmi.
 \end{svgraybox}
 
-V tem seminarju vezja iz članka~\cite{alharbi2024} ponovno zgradimo v orodju QCADesigner-E in rezultate simulacij primerjamo z objavljenimi. Nato gremo še korak dlje in zasnovo razširimo na lasten reverzibilni multiplekser 16:1. Programska oprema je dostopna na git repozitoriju~\cite{qca_mux}.
+V tem seminarju vezja iz članka~\cite{alharbi2024} ponovno zgradimo v orodju QCADesigner-E in rezultate simulacij primerjamo z objavljenimi. Nato gremo še korak dlje in zasnovo razširimo na lasten reverzibilni multiplekser 16:1. Programska oprema je dostopna na git repozitoriju https://github.com/aljagaming/QCA-MUX.git.
 
 Poročilo je zgrajeno takole. V razdelku~\ref{g25:sec:gradniki} spoznamo osnovne gradnike QCA. V razdelku~\ref{g25:sec:metode} opišemo metodologijo in metrike, s katerimi vezja merimo. V razdelku~\ref{g25:sec:gradnja} multiplekserje gradimo korak za korakom, od 2:1 do 16:1, v razdelku~\ref{g25:sec:rezultati} pa rezultate postavimo ob bok objavljenim.
 
@@ -418,30 +418,31 @@ Vsa vezja smo simulirali pri parametrih iz tabele~\ref{tab:parametri} in za vsak
 Vezje & Št.~celic & Površina & Zakasnitev & Vir \\
 \midrule
 2:1  & 56 & 0,09 & 1 & članek \\
-     & \textbf{[X]} & \textbf{[X]} & \textbf{[X]} & naši \\
+     & \textbf{[56]} & \textbf{[0,09]} & \textbf{[1]} & naši \\
 4:1  & 213 & 0,46 & 3 & članek \\
-     & \textbf{[X]} & \textbf{[X]} & \textbf{[X]} & naši \\
+     & \textbf{[204]} & \textbf{[0.42]} & \textbf{[3]} & naši \\
 8:1  & 646 & 1,36 & 5,5 & članek \\
-     & \textbf{[X]} & \textbf{[X]} & \textbf{[X]} & naši \\
+     & \textbf{[618]} & \textbf{[1,30]} & \textbf{[5,5]} & naši \\
 16:1 & --- & --- & --- & članek \\
-     & \textbf{[X]} & \textbf{[X]} & \textbf{[X]} & naši \\
+     & \textbf{[1679]} & \textbf{[4,10]} & \textbf{[11,25]} & naši \\
 \bottomrule
 \end{tabular}
 \caption{Primerjava naših rezultatov z rezultati iz članka~\cite{alharbi2024}. Zakasnitev je podana v urinih periodah, površina v $\mu\mathrm{m}^2$.}
 \label{g25:tab:primerjava}
 \end{table}
 
-Naše izvedbe so zelo blizu objavljenim. Število celic se razlikuje le za nekaj enot: pri multiplekserju 2:1 za \textbf{[X]}, pri 4:1 za \textbf{[X]} in pri 8:1 za \textbf{[X]} celice, \colorbox{yellow}{torej v vseh primerih za približno 3 do 4 celice na vezje.} Naša vezja so tako nekoliko manjša od objavljenih. Ker je površina vezja neposredno povezana s številom celic in njihovo razporeditvijo, je manjše tudi zavzeto območje: pri 2:1 za \textbf{[X]}~$\mu\mathrm{m}^2$, pri 4:1 za \textbf{[X]}~$\mu\mathrm{m}^2$ in pri 8:1 za \textbf{[X]}~$\mu\mathrm{m}^2$. Relativno odstopanje je pri vseh vezjih majhno (največ \textbf{[X]}\,\%), kar se ujema s pričakovanjem, da bodo odstopanja minimalna.
+Naše izvedbe so zelo blizu objavljenim. Število celic, navedeno v članku, se od našega razlikuje pri multiplekserjih 4:1 in 8:1: pri 4:1 za 9 celic (213 proti 204) in pri 8:1 za 28 celic (646 proti 618), medtem ko se vrednosti pri 2:1 ujemajo (56). Temu primerno je tudi v članku navedena površina nekoliko večja: pri 4:1 za 0,04~$\mu\mathrm{m}^2$ in pri 8:1 za 0,06~$\mu\mathrm{m}^2$, relativno odstopanje pa je največ 8,7\,\%.
 
-Razlog za to razliko je verjetno v podrobnostih postavitve celic. Slika v članku podaja zgradbo vezja, ne pa tudi natančnega položaja vsake celice, zato smo nekatere povezave in razmike izbrali sami. Z nekoliko krajšimi vodniki med vrati in z bolj strnjeno razporeditvijo kopij vhodov smo prihranili nekaj celic, ne da bi spremenili logično zgradbo ali delovanje. Zakasnitev se pri tem ni spremenila: tudi naša vezja potrebujejo enako število urinih ciklov (1, 3 in 5.5 pri 2:1, 4:1 in 8:1), saj je ta odvisna od števila urinih območij, skozi katera potuje signal, in ne od števila celic v posameznem območju.
+Ko smo celice v postavitvah, prikazanih v članku, prešteli sami, smo dobili enaki števili kot pri naših vezjih, to je 204 in 618. Zato domnevamo, da gre pri vrednostih v članku za nenamerno napako pri štetju in ne za dejansko razliko med vezji. Naša vezja so torej enakovredna objavljenim, razlikujejo se le navedena števila. Zakasnitev je prav tako enaka (1, 3 in 5,5 urinega cikla pri 2:1, 4:1 in 8:1), saj je odvisna od števila urinih območij, skozi katera potuje signal, in ne od števila celic v posameznem območju.
 
 \subsection{Lastnosti multiplekserja 16:1}
 \label{g25:sec:lastnosti16}
 
-Simulacija multiplekserja 16:1 je pokazala, da vezje deluje pravilno: za vseh $2^{4}$ kombinacij izbirnih vhodov $S3S2S1S0$ se na izhodu pojavi ustrezen podatkovni vhod, od $A$ pri $0000$ do $P$ pri $1111$. Vezje vsebuje \textbf{[X]} celic, zavzame \textbf{[X]}~$\mu\mathrm{m}^2$ in ima zakasnitev \textbf{[X]} urinih period.
+Simulacija multiplekserja 16:1 je pokazala, da vezje deluje pravilno: za vseh $2^{4}$ kombinacij izbirnih vhodov $S3S2S1S0$ se na izhodu pojavi ustrezen podatkovni vhod, od $A$ pri $0000$ do $P$ pri $1111$. Vezje vsebuje 1679 celic, zavzame 4,10~$\mu\mathrm{m}^2$ in ima zakasnitev 11,25 urine periode.
 
-Rezultate lahko primerjamo z manjšimi multiplekserji. Ker je 16:1 sestavljen iz petnajstih multiplekserjev 2:1, se število celic in površina približno podvojita glede na 8:1, ki vsebuje sedem takih gradnikov. Povečanje števila celic za faktor \textbf{[X]} in površine za faktor \textbf{[X]} je v skladu s tem pričakovanjem. Dodatna urina perioda oziroma dodatni urini območji so posledica nove stopnje, ki jo uvede končni multiplekser 2:1, zakasnitev pa se je v primerjavi z 8:1 povečala za \textbf{[X]}. Del povečanja površine gre tudi na račun dodatne plasti, ki smo jo uporabili za izbirne signale (razdelek~\ref{g25:sec:mux16}).
+Rezultate lahko primerjamo z manjšimi multiplekserji. Ker je 16:1 sestavljen iz petnajstih multiplekserjev 2:1, medtem ko 8:1 vsebuje sedem takih gradnikov, bi pričakovali nekoliko več kot dvakratno povečanje števila celic in površine. Dejansko se je število celic povečalo za faktor 2,72 (1679 proti 618), površina pa za faktor 3,15 (4,10 proti 1,30~$\mu\mathrm{m}^2$). Rast je torej večja od pričakovane: na en gradnik 2:1 pride pri 16:1 v povprečju približno 112 celic, pri 8:1 pa približno 88. Razlog je verjetno v daljših povezavah za razvod izbirnih signalov in njihovih kopij ter v dodatni plasti, ki smo jo uporabili za izbirne signale (razdelek~\ref{g25:sec:mux16}), saj ta ne prispeva k številu gradnikov, povečuje pa število celic in površino.
 
+Zakasnitev se je v primerjavi z 8:1 povečala za 5,75 urine periode, tj. s 5,5 na 11,25, kar je približno dvakrat toliko. Dodatna stopnja z enim multiplekserjem 2:1 sama po sebi doda le eno urino periodo, zato je preostalo povečanje posledica daljših poti, po katerih potujejo signali, in sinhronizacije podatkov z izbirnimi signali, ki zahteva dodatna urina območja.
 \subsection{Razprava}
 \label{g25:sec:razprava}
 
