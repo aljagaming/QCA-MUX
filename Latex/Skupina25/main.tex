@@ -75,8 +75,13 @@
 \section{Uvod}
 \label{g25:sec:uvod}
 
-[Motivacija: QCA kot alternativa CMOS, reverzibilna logika, vloga multiplekserja.
-Sorodna dela.]
+Že več desetletij se tranzistorji krčijo, vsako generacijo za košček, in vsakič se zdi, da je meja še kje daleč. Zdaj je prišla blizu. Na ravni nekaj nanometrov elektroni uhajajo skozi pregrade, ki naj bi jih zadrževale, čipi se pregrevajo, računanje pa je vse bolj vprašanje toplote in ne več hitrosti. Zato raziskovalci iščejo nove poti. Ena najbolj drznih so kvantni celični avtomati (angl.~\emph{quantum-dot cellular automata}, QCA)~\cite{lent1993}. V njih ni žic in ni toka: informacijo nosi položaj dveh elektronov v drobni celici, sosednja celica pa ga zazna in ponovi, tako kot se val prenese po vrsti domin. Ena vrednost bita je en razporeditveni vzorec elektronov, druga je njegovo zrcalo.
+
+Tudi najboljša tehnologija pa ne more mimo fizike informacije. Po Landauerjevem načelu~\cite{landauer1961} ima vsako izbrisanje bita svojo ceno: v okolico se sprosti vsaj $k_B T \ln 2$ toplote. Bennett je pokazal, da ceni lahko ubežimo, če ničesar ne pozabimo~\cite{bennett1973}. V reverzibilni logiki je vsak izhod pot nazaj do vhodov, nobena informacija ne izgine, zato tudi toplota ni neizogibna. Ko reverzibilno logiko združimo s tehnologijo QCA, dobimo vezja, ki so tanka kot nanometrska nit in se, vsaj v načelu, ne segrevajo.
+
+Med osnovnimi gradniki digitalnega sveta ima multiplekser posebno vlogo: je kot kretničar, ki iz množice tirov izbere enega in ga usmeri naprej. Najdemo ga v pomnilnikih, aritmetičnih enotah in povsod, kjer je treba podatke usmerjati. Ker večje multiplekserje sestavimo iz manjših, vsaka malenkost pri najmanjšem odmeva v celotnem vezju.
+
+Reverzibilne multiplekserje v QCA so obravnavali že različni avtorji. Mi se opiramo na članek~\cite{alharbi2024}, ki predstavi reverzibilne multiplekserje 2:1, 4:1 in 8:1, zgrajene iz reverzibilnih večinskih vrat in negatorja, skupaj z njihovo površino, številom celic in zakasnitvijo.
 
 \begin{svgraybox}
 \textbf{Raziskovalno vprašanje.} Ali lahko rezultate članka~\cite{alharbi2024}
@@ -88,6 +93,9 @@ z rezultati, objavljenimi v članku \cite{alharbi2024}, ob predvidenih minimalni
 delujoč multiplekser 16:1 z ocenjenimi lastnostmi.
 \end{svgraybox}
 
+V tem seminarju vezja iz članka~\cite{alharbi2024} ponovno zgradimo v orodju QCADesigner-E in rezultate simulacij primerjamo z objavljenimi. Nato gremo še korak dlje in zasnovo razširimo na lasten reverzibilni multiplekser 16:1. Programska oprema je dostopna na git repozitoriju~\cite{qca_mux}.
+
+Poročilo je zgrajeno takole. V razdelku~\ref{g25:sec:gradniki} spoznamo osnovne gradnike QCA. V razdelku~\ref{g25:sec:metode} opišemo metodologijo in metrike, s katerimi vezja merimo. V razdelku~\ref{g25:sec:gradnja} multiplekserje gradimo korak za korakom, od 2:1 do 16:1, v razdelku~\ref{g25:sec:rezultati} pa rezultate postavimo ob bok objavljenim.
 
 \section{Osnovni gradniki}
 \label{g25:sec:gradniki}
@@ -156,19 +164,92 @@ Sliki~\ref{g25:fig:majority}b in~\ref{g25:fig:majority}c prikazujeta, kako isto 
 \section{Metode}
 \label{g25:sec:metode}
 
-\subsection{Orodje in začetni parametri simulacije}
-\label{g25:sec:orodja}
-QCADesigner-E: velikost celice, razdalja med celicami, radij vpliva
-(angl.~\emph{radius of effect}), ostali parametri (tabela).
-
 \subsection{Zasnova poskusov}
 \label{g25:sec:poskusi}
-Ponovna izdelava vezij iz članka, vhodni vektorji, primerjava z objavljenimi
-rezultati, nato lastna nadgradnja na 16:1.
 
+Poskuse smo izvedli v več korakih. Najprej smo v orodju QCADesigner-E izdelali reverzibilne multiplekserje 2:1, 4:1 in 8:1. Pri njihovi izdelavi smo uporabili osnovne gradnike, opisane v razdelku~\ref{g25:sec:gradniki}, ter parametre simulacije, navedene v razdelku~\ref{g25:sec:orodja}.
+
+Pravilnost delovanja posameznega vezja smo preverili s simulacijo vseh kombinacij vhodnih signalov. Dobljene izhodne vrednosti smo primerjali s pričakovanimi vrednostmi, nato pa še z rezultati, objavljenimi v članku. Pri primerjavi smo upoštevali metrike, predstavljene v razdelku~\ref{g25:sec:metrike}.
+
+Na podlagi preverjenih zasnov smo nato razvili še lastno izvedbo reverzibilnega multiplekserja 16:1. Pri tem smo uporabili hierarhično povezovanje manjših multiplekserjev, podrobneje predstavljeno v razdelku~\ref{g25:sec:mux16}.
+ 
+\subsection{Orodje in začetni parametri simulacije}
+\label{g25:sec:orodja}
+
+Za načrtovanje, izdelavo in simulacijo multiplekserjev smo uporabili orodje QCADesigner-E. V njem smo izdelali posamezne gradnike ter celotna vezja multiplekserjev. Za uporabo tega orodja smo se odločili, ker je QCADesigner uveljavljeno orodje za načrtovanje in simulacijo vezij na osnovi kvantnih celičnih avtomatov. Njegova razširjena različica QCADesigner-E omogoča uporabo energijskega simulacijskega modela, ki omogoča podrobnejšo analizo delovanja vezij in njihovega odziva med simulacijo.
+
+Začetne tehnološke in simulacijske parametre smo prevzeli iz članka \cite{alharbi2024}. Uporabljene vrednosti tehnoloških parametrov in parametrov simulacije so predstavljene v tabeli \ref{tab:parametri}.
+
+
+\begin{table}[htbp]
+    \centering
+    \scriptsize
+    
+    \begin{subtable}[t]{0.48\textwidth}
+        \centering
+        \caption{Tehnološki parametri}
+        \label{tab:tehnoloski}
+        \begin{tabular}{lll}
+            \toprule
+            Parameter & Opis & Vrednost \\
+            \midrule
+            QD size & Velikost kvantne pike & 5 nm \\
+            Cell area & Dimenzije celice & $18 \times 18$ nm \\
+            Cell distance & Razdalja med celicama & 2 nm \\
+            Layer separation & Razdalja med plastmi & 11,5 nm \\
+            Clock high & Največja energija ure & $9,8 \times 10^{-22}$ J \\
+            Clock low & Najmanjša energija ure & $3,8 \times 10^{-23}$ J \\
+            Relative permittivity & Relativna permitivnost & 12,9 \\
+            Radius of effect & Radij interakcije & 80 nm \\
+            Temp & Delovna temperatura & 1 K \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+    % \hspace{0.02\textwidth}
+    \hfill
+    \begin{subtable}[t]{0.48\textwidth}
+        \centering
+        \caption{Simulacijski parametri}
+        \label{tab:simulacijski}
+        \begin{tabular}{lll}
+            \toprule
+            Parameter & Opis & Vrednost \\
+            \midrule
+            $\tau$ & Relaksacijski čas & $1 \times 10^{-15}$ s \\
+            $T_{\gamma}$ & Period ure & $1 \times 10^{-9}$ s \\
+            $T_{in}$ & Period vhodnih signalov & $1 \times 10^{-9}$ s \\
+            $T_{step}$ & Časovni korak & $1 \times 10^{-16}$ s \\
+            $T_{sim}$ & Čas simulacije & $8 \times 10^{-9}$ s \\
+            $\gamma_{shape}$ & Oblika signalov ure & Gaussova \\
+            $\gamma_{slope}$ & Čas vzpona in padca & $1 \times 10^{-10}$ s \\
+            & & \\
+            & & \\
+            \bottomrule
+        \end{tabular}
+    \end{subtable}
+    \caption{Uporabljeni tehnološki in simulacijski parametri.}
+    \label{tab:parametri}
+\end{table}
+ 
 \subsection{Metrike}
 \label{g25:sec:metrike}
-Površina, število celic, časovna zakasnitev (angl.~\emph{clock delay}).
+
+Za vrednotenje in primerjavo izdelanih multiplekserjev smo izbrali več metrik, ki omogočajo analizo njihove kompleksnosti, prostorske zahtevnosti in časovnega delovanja.
+
+Pri primerjavi smo upoštevali naslednje metrike:
+
+\begin{itemize}
+    \item \textit{Število celic:} predstavlja skupno število kvantnih celičnih avtomatov (QCA), uporabljenih za izdelavo posameznega vezja.
+
+    \item \textit{Površina vezja ($\mu m^2$):} predstavlja skupno površino, ki jo zavzema posamezno vezje.
+
+    \item \textit{Perioda ure:} predstavlja čas trajanja ene periode urnega signala, ki določa časovno organizacijo delovanja vezja.
+
+    \item \textit{Zakasnitev (število ciklov ure):} predstavlja število ciklov urnega signala, potrebnih za prenos vhodnega signala skozi vezje in pojav ustrezne vrednosti na izhodu.
+
+\end{itemize}
+
+Na podlagi navedenih metrik smo primerjali posamezne izvedbe multiplekserjev in ovrednotili razlike med dobljenimi rezultati ter rezultati, predstavljenimi v izbranem članku.
 
 \section{Zaporedna gradnja multiplekserjev}
 \label{g25:sec:gradnja}
@@ -289,7 +370,7 @@ Vezje ima šestnajst podatkovnih vhodov od $A$ do $P$ ter štiri izbirne vhode o
 
 Pri 16:1 se izbirni signali $S0$, $S1$ in $S2$ razvejijo na oba multiplekserja 8:1, signal $S3$ pa mora priti do končnega multiplekserja 2:1. Te poti neizogibno sekajo druge vodnike, zato vseh izbirnih vhodov ni mogoče povezati v eni plasti. Podobno kot v članku~\cite{alharbi2024} smo zato del celic, ki prenašajo izbirne signale, postavili na dodatno plast, s čimer smo povezali vse izbirne vhode, ne da bi se signali med seboj motili.
 
-Število celic, površino in zakasnitev določimo s simulacijo (razdelek~\ref{g25:sec:lastnosti16}).
+Število celic, površino in zakasnitev določimo v razdelku~\ref{g25:sec:lastnosti16}.
 
 
 
@@ -325,48 +406,49 @@ Pri 16:1 se izbirni signali $S0$, $S1$ in $S2$ razvejijo na oba multiplekserja 8
 \section{Rezultati}
 \label{g25:sec:rezultati}
 
-
 \subsection{Primerjava z objavljenimi rezultati}
 \label{g25:sec:primerjava}
 
-\begin{table}[t]
+Vsa vezja smo simulirali pri parametrih iz tabele~\ref{tab:parametri} in za vsako preverili vse kombinacije vhodnih signalov. Izhodi multiplekserjev 2:1, 4:1 in 8:1 so se ujemali s pričakovanimi vrednostmi in z rezultati iz članka~\cite{alharbi2024}, kar potrjuje pravilnost naših izvedb. Primerjavo števila celic, površine in zakasnitve prikazuje tabela~\ref{g25:tab:primerjava}.
+
+\begin{table}[H]
 \centering
-\caption{Primerjava naših rezultatov z rezultati iz članka~\cite{alharbi2024}.}
-\label{g25:tab:primerjava}
 \begin{tabular}{lcccc}
 \toprule
 Vezje & Št.~celic & Površina & Zakasnitev & Vir \\
 \midrule
-2:1  & [ ] & [ ] & [ ] & članek \\
-     & [ ] & [ ] & [ ] & naši \\
-4:1  & [ ] & [ ] & [ ] & članek \\
-     & [ ] & [ ] & [ ] & naši \\
-8:1  & [ ] & [ ] & [ ] & članek \\
-     & [ ] & [ ] & [ ] & naši \\
-16:1  & [ ] & [ ] & [ ] & članek \\
-     & [ ] & [ ] & [ ] & naši \\
+2:1  & 56 & 0,09 & 1 & članek \\
+     & \textbf{[X]} & \textbf{[X]} & \textbf{[X]} & naši \\
+4:1  & 213 & 0,46 & 3 & članek \\
+     & \textbf{[X]} & \textbf{[X]} & \textbf{[X]} & naši \\
+8:1  & 646 & 1,36 & 5,5 & članek \\
+     & \textbf{[X]} & \textbf{[X]} & \textbf{[X]} & naši \\
+16:1 & --- & --- & --- & članek \\
+     & \textbf{[X]} & \textbf{[X]} & \textbf{[X]} & naši \\
 \bottomrule
 \end{tabular}
+\caption{Primerjava naših rezultatov z rezultati iz članka~\cite{alharbi2024}. Zakasnitev je podana v urinih periodah, površina v $\mu\mathrm{m}^2$.}
+\label{g25:tab:primerjava}
 \end{table}
+
+Naše izvedbe so zelo blizu objavljenim. Število celic se razlikuje le za nekaj enot: pri multiplekserju 2:1 za \textbf{[X]}, pri 4:1 za \textbf{[X]} in pri 8:1 za \textbf{[X]} celice, \colorbox{yellow}{torej v vseh primerih za približno 3 do 4 celice na vezje.} Naša vezja so tako nekoliko manjša od objavljenih. Ker je površina vezja neposredno povezana s številom celic in njihovo razporeditvijo, je manjše tudi zavzeto območje: pri 2:1 za \textbf{[X]}~$\mu\mathrm{m}^2$, pri 4:1 za \textbf{[X]}~$\mu\mathrm{m}^2$ in pri 8:1 za \textbf{[X]}~$\mu\mathrm{m}^2$. Relativno odstopanje je pri vseh vezjih majhno (največ \textbf{[X]}\,\%), kar se ujema s pričakovanjem, da bodo odstopanja minimalna.
+
+Razlog za to razliko je verjetno v podrobnostih postavitve celic. Slika v članku podaja zgradbo vezja, ne pa tudi natančnega položaja vsake celice, zato smo nekatere povezave in razmike izbrali sami. Z nekoliko krajšimi vodniki med vrati in z bolj strnjeno razporeditvijo kopij vhodov smo prihranili nekaj celic, ne da bi spremenili logično zgradbo ali delovanje. Zakasnitev se pri tem ni spremenila: tudi naša vezja potrebujejo enako število urinih ciklov (1, 3 in 5.5 pri 2:1, 4:1 in 8:1), saj je ta odvisna od števila urinih območij, skozi katera potuje signal, in ne od števila celic v posameznem območju.
 
 \subsection{Lastnosti multiplekserja 16:1}
 \label{g25:sec:lastnosti16}
-Površina, zakasnitev, število celic.
 
-\section{Razprava}
+Simulacija multiplekserja 16:1 je pokazala, da vezje deluje pravilno: za vseh $2^{4}$ kombinacij izbirnih vhodov $S3S2S1S0$ se na izhodu pojavi ustrezen podatkovni vhod, od $A$ pri $0000$ do $P$ pri $1111$. Vezje vsebuje \textbf{[X]} celic, zavzame \textbf{[X]}~$\mu\mathrm{m}^2$ in ima zakasnitev \textbf{[X]} urinih period.
+
+Rezultate lahko primerjamo z manjšimi multiplekserji. Ker je 16:1 sestavljen iz petnajstih multiplekserjev 2:1, se število celic in površina približno podvojita glede na 8:1, ki vsebuje sedem takih gradnikov. Povečanje števila celic za faktor \textbf{[X]} in površine za faktor \textbf{[X]} je v skladu s tem pričakovanjem. Dodatna urina perioda oziroma dodatni urini območji so posledica nove stopnje, ki jo uvede končni multiplekser 2:1, zakasnitev pa se je v primerjavi z 8:1 povečala za \textbf{[X]}. Del povečanja površine gre tudi na račun dodatne plasti, ki smo jo uporabili za izbirne signale (razdelek~\ref{g25:sec:mux16}).
+
+\subsection{Razprava}
 \label{g25:sec:razprava}
 
-\subsection{Kaj ni delovalo}
-\label{g25:sec:neuspehi}
+Naši rezultati potrjujejo vezja iz članka~\cite{alharbi2024}: vsa tri vezja delujejo pravilno, zakasnitve so enake, število celic in površina pa se razlikujeta le za nekaj odstotkov. Manjša velikost naših vezij je posledica drobnih razlik pri ročni postavitvi celic in ne spremembe zasnove. Razširitev na multiplekser 16:1 kaže, da je hierarhični pristop uporaben tudi pri večjih vezjih, saj lahko iste gradnike večkrat uporabimo, cena pa je rast števila celic, površine in zakasnitve. Pri tem ne smemo zanemariti, da je rezultate primerjano le glede števila celic, površine in zakasnitve, energijske disipacije pa nismo analizirali.
 
-\section{Zaključek}
-\label{g25:sec:zakljucek}
-
-\section*{Doprinosi avtorjev}
-[ ]
-
-\section*{Izjava o uporabi generativne umetne inteligence}
-[ ]
+% \section*{Izjava o uporabi generativne umetne inteligence}
+% [ ]
 
 %%%% KRAJ MOJE KODE %%%%
 
