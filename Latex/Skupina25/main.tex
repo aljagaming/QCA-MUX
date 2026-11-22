@@ -123,7 +123,7 @@ Prenos podatkov po vezju usmerja urino polje, ki ima štiri faze: preklop (angl.
 Prvi gradnik naših multiplekserjev je negator (angl.~\emph{inverter}),
 ki izvaja funkcijo negacije: vhodno vrednost 0 preslika v 1 in vhodno
 vrednost 1 v 0. Osnovna izvedba z eno vejo (angl.~\emph{single-branch
-inverter}) je prikazana na sliki~\ref{g25:fig:inverter}a. V naših vezjih bomo uporabljali tudi negator z dvema vejama (angl.~\emph{double-branch
+inverter}) je prikazana na sliki~\ref{g25:fig:inverter}a. Obstaja tudi negator z dvema vejama (angl.~\emph{double-branch
 inverter}), prikazan na sliki~\ref{g25:fig:inverter}b.
 Katero izvedbo izberemo, je odvisno od tega, koliko prostora imamo, kako
 hitro mora vezje delovati in kako odporno mora biti na šum.
@@ -234,7 +234,8 @@ Začetne tehnološke in simulacijske parametre smo prevzeli iz članka \cite{alh
 \subsection{Metrike}
 \label{g25:sec:metrike}
 
-Za vrednotenje in primerjavo izdelanih multiplekserjev smo izbrali več metrik, ki omogočajo analizo njihove kompleksnosti, prostorske zahtevnosti in časovnega delovanja.
+Za vrednotenje in primerjavo izdelanih multiplekserjev smo izbrali več metrik, ki omogočajo analizo njihove kompleksnosti, prostorske zahtevnosti in časovnega delovanja.\\
+
 
 Pri primerjavi smo upoštevali naslednje metrike:
 
@@ -245,7 +246,7 @@ Pri primerjavi smo upoštevali naslednje metrike:
 
     \item \textit{Perioda ure:} predstavlja čas trajanja ene periode urnega signala, ki določa časovno organizacijo delovanja vezja.
 
-    \item \textit{Zakasnitev (število ciklov ure):} predstavlja število ciklov urnega signala, potrebnih za prenos vhodnega signala skozi vezje in pojav ustrezne vrednosti na izhodu.
+    \item \textit{Zakasnitev (število ciklov ure):} predstavlja število ciklov urnega signala, potrebnih za prenos vhodnega signala skozi vezje in pojav ustrezne vrednosti na izhodu. En urin cikel sestavljajo štiri urina območja (angl.~\emph{clock zones}), zato na primer 22 urinih območij ustreza 5,5 urinega cikla.
 
 \end{itemize}
 
@@ -268,20 +269,20 @@ Vezje ima tri vhode: podatka $A$ in $B$ ter izbirni vhod $S$. Izhod podaja funkc
 \begin{equation}
     \mathrm{Mux} = (\overline{S} \cdot A) + (S \cdot B),
 \end{equation}
-torej je pri $S=0$ na izhodu $A$, pri $S=1$ pa $B$. Zaradi reverzibilnosti se vhodi ohranijo v obliki kopij $A_\mathrm{cp}$, $B_\mathrm{cp}$, $S_\mathrm{cp}$ in $S'_\mathrm{cp}$, poleg njih pa sta prisotna še odvečna izhoda $g_1$ in $g_2$. Po članku~\cite{alharbi2024} vezje vsebuje 56 celic, zavzame \SI{0,09}{\micro\metre\squared} in ima zakasnitev štirih urinih območij, kar ustreza eni urini periodi.
+torej je pri $S=0$ na izhodu $A$, pri $S=1$ pa $B$. Zaradi reverzibilnosti se vhodi ohranijo v obliki kopij $A_\mathrm{cp}$, $B_\mathrm{cp}$, $S_\mathrm{cp}$ in $S'_\mathrm{cp}$, poleg njih pa sta prisotna še odvečna izhoda $g_1$ in $g_2$. Po članku~\cite{alharbi2024} vezje vsebuje 56 celic, zavzame \SI{0,09}{\micro\metre\squared} in ima zakasnitev štirih urinih območij, kar ustreza eni urini periodi. Naša izvedba se ujema.
 
 \begin{figure}[H]
 \centering
 \begin{subfigure}[b]{0.50\textwidth}
     \centering
-    \raisebox{0cm}{\includegraphics[width=\linewidth]{CIRCUITMux2_1}}
+    \raisebox{0.0cm}{\includegraphics[width=\linewidth]{CIRCUITMux2_1}}
     \caption{}
     \label{g25:fig:mux2:a}
 \end{subfigure}
 \hfill
 \begin{subfigure}[b]{0.40\textwidth}
     \centering
-    \includegraphics[width=\linewidth]{mux2_1-1}
+    \raisebox{0.2cm}   {\includegraphics[width=\linewidth]{mux2_1-1}}
     \caption{}
     \label{g25:fig:mux2:b}
 \end{subfigure}
@@ -299,7 +300,7 @@ Vezje ima štiri podatkovne vhode $A$, $B$, $C$ in $D$ ter dva izbirna vhoda $S0
 \begin{equation}
     \mathrm{Mux} = \big(\overline{S1} \cdot (\overline{S0}\cdot A + S0 \cdot B)\big) + \big(S1 \cdot (\overline{S0}\cdot C + S0 \cdot D)\big),
 \end{equation}
-pri čemer kombinacije $S1S0 = 00, 01, 10, 11$ po vrsti izberejo $A$, $B$, $C$ in $D$. Vhodi se ohranijo v obliki kopij ($A_\mathrm{cp}$ do $D_\mathrm{cp}$, $S0_\mathrm{cp}$, $S1_\mathrm{cp}$, $S0'_\mathrm{cp}$ in $S1'_\mathrm{cp}$), odvečni izhodi pa so označeni z $g$. Po članku~\cite{alharbi2024} vezje vsebuje 213 celic, zavzame \SI{0,46}{\micro\metre\squared} in ima zakasnitev 12 urinih območij, kar ustreza trem urinim periodam.
+pri čemer kombinacije $S1S0 = 00, 01, 10, 11$ po vrsti izberejo $A$, $B$, $C$ in $D$. Vhodi se ohranijo v obliki kopij ($A_\mathrm{cp}$ do $D_\mathrm{cp}$, $S0_\mathrm{cp}$, $S1_\mathrm{cp}$, $S0'_\mathrm{cp}$ in $S1'_\mathrm{cp}$), odvečni izhodi pa so označeni z $g$. Naša izvedba vezja vsebuje 204 celic, zavzame \SI{0,42}{\micro\metre\squared} in ima zakasnitev 12 urinih območij, kar ustreza trem urinim periodam.
 
 
 
@@ -334,14 +335,14 @@ pri čemer kombinacije $S1S0 = 00, 01, 10, 11$ po vrsti izberejo $A$, $B$, $C$ i
 
 Reverzibilni multiplekser 8:1 zgradimo iz dveh multiplekserjev 4:1 in enega dodatnega multiplekserja 2:1 (slika~\ref{g25:fig:mux8}). Prvi multiplekser 4:1 izbira med vhodi $A$ do $D$, drugi med vhodi $E$ do $H$, oba pa krmilita isti izbirni vhoda $S0$ in $S1$. Multiplekser 2:1 z izbirnim vhodom $S2$ nato izbere med njunima izhodoma. Skupaj vezje vsebuje sedem multiplekserjev 2:1, ki so razporejeni v tri stopnje.
 
-Vezje ima osem podatkovnih vhodov od $A$ do $H$ ter tri izbirne vhode $S0$, $S1$ in $S2$. Kombinacija $S2S1S0$ določi, kateri vhod se prenese na izhod $\mathrm{Mux}$; na primer $S2S1S0=000$ izbere $A$, $S2S1S0=111$ pa $H$. Vhodi se ohranijo v obliki kopij ($A_\mathrm{cp}$ do $H_\mathrm{cp}$, $S0_\mathrm{cp}$, $S1_\mathrm{cp}$, $S2_\mathrm{cp}$ in njihovih negiranih kopij), odvečni izhodi so označeni z $g$. Po članku~\cite{alharbi2024} vezje vsebuje 646 celic, zavzame \SI{1,36}{\micro\metre\squared} in ima zakasnitev 22 urinih območij, kar ustreza 5,5 urine periode. Uporabljenih je 7 negatorjev, 14 vrat AND in 7 vrat OR.
+Vezje ima osem podatkovnih vhodov od $A$ do $H$ ter tri izbirne vhode $S0$, $S1$ in $S2$. Kombinacija $S2S1S0$ določi, kateri vhod se prenese na izhod $\mathrm{Mux}$; na primer $S2S1S0=000$ izbere $A$, $S2S1S0=111$ pa $H$. Vhodi se ohranijo v obliki kopij ($A_\mathrm{cp}$ do $H_\mathrm{cp}$, $S0_\mathrm{cp}$, $S1_\mathrm{cp}$, $S2_\mathrm{cp}$ in njihovih negiranih kopij), odvečni izhodi so označeni z $g$. Naša izvedba vezja vsebuje 618 celic, zavzame \SI{1,30}{\micro\metre\squared} in ima zakasnitev 22 urinih območij, kar ustreza 5,5 urine periode. Uporabljenih je 7 negatorjev, 14 vrat AND in 7 vrat OR.
 
 
 \begin{figure}[H]
 \centering
 \begin{subfigure}[b]{0.50\textwidth}
     \centering
-    \raisebox{1.2cm}{\includegraphics[width=\linewidth]{CIRCUITMux8_1}}
+    \raisebox{1.1cm}{\includegraphics[width=\linewidth]{CIRCUITMux8_1}}
     \caption{}
     \label{g25:fig:mux8:a}
 \end{subfigure}
@@ -369,8 +370,7 @@ Reverzibilni multiplekser 16:1 je naša nadgradnja zasnove iz članka. Zgradimo 
 Vezje ima šestnajst podatkovnih vhodov od $A$ do $P$ ter štiri izbirne vhode od $S0$ do $S3$. Kombinacija $S3S2S1S0$ določi, kateri vhod se prenese na izhod $\mathrm{Mux}$; na primer $S3S2S1S0=0000$ izbere $A$, $1111$ pa $P$. Vhodi se ohranijo v obliki kopij ($A_\mathrm{cp}$ do $P_\mathrm{cp}$, $S0_\mathrm{cp}$ do $S3_\mathrm{cp}$ ter $S0'_\mathrm{cp}$ do $S3'_\mathrm{cp}$), odvečni izhodi so označeni z $g$. Vezje uporablja 15 negatorjev, 30 vrat AND in 15 vrat OR.
 
 Pri 16:1 se izbirni signali $S0$, $S1$ in $S2$ razvejijo na oba multiplekserja 8:1, signal $S3$ pa mora priti do končnega multiplekserja 2:1. Te poti neizogibno sekajo druge vodnike, zato vseh izbirnih vhodov ni mogoče povezati v eni plasti. Podobno kot v članku~\cite{alharbi2024} smo zato del celic, ki prenašajo izbirne signale, postavili na dodatno plast, s čimer smo povezali vse izbirne vhode, ne da bi se signali med seboj motili.
-
-Število celic, površino in zakasnitev določimo v razdelku~\ref{g25:sec:lastnosti16}.
+Naša izvedba vezja vsebuje 1679 celic, zavzame \SI{4,10}{\micro\metre\squared} in ima zakasnitev 45 urinih območij, kar ustreza 11,25 urine periode.
 
 
 
@@ -384,7 +384,7 @@ Pri 16:1 se izbirni signali $S0$, $S1$ in $S2$ razvejijo na oba multiplekserja 8
     \centering
     \setbox0=\hbox{\includegraphics[width=0.40\textwidth]{mux8_1-1}}%     slika celic (desno)
     \setbox2=\hbox{\includegraphics[width=\linewidth]{CIRCUITMux16_1}}%   shema (levo)
-    \raisebox{1.2cm}{\includegraphics[width=\linewidth]{CIRCUITMux16_1}}
+    \raisebox{2.5cm}{\includegraphics[width=\linewidth]{CIRCUITMux16_1}}
     \caption{}
     \label{g25:fig:mux16:a}
 \end{subfigure}
@@ -446,8 +446,7 @@ Zakasnitev se je v primerjavi z 8:1 povečala za 5,75 urine periode, tj. s 5,5 n
 \subsection{Razprava}
 \label{g25:sec:razprava}
 
-Naši rezultati potrjujejo vezja iz članka~\cite{alharbi2024}: vsa tri vezja delujejo pravilno, zakasnitve so enake, število celic in površina pa se razlikujeta le za nekaj odstotkov. Manjša velikost naših vezij je posledica drobnih razlik pri ročni postavitvi celic in ne spremembe zasnove. Razširitev na multiplekser 16:1 kaže, da je hierarhični pristop uporaben tudi pri večjih vezjih, saj lahko iste gradnike večkrat uporabimo, cena pa je rast števila celic, površine in zakasnitve. Pri tem ne smemo zanemariti, da je rezultate primerjano le glede števila celic, površine in zakasnitve, energijske disipacije pa nismo analizirali.
-
+Naši rezultati potrjujejo vezja iz članka~\cite{alharbi2024}: vsa tri vezja delujejo pravilno, zakasnitve so enake, število celic in površina pa se razlikujeta le za nekaj odstotkov. Ker smo pri ročnem štetju celic v postavitvah iz članka dobili enaki števili kot pri naših vezjih (204 in 618), domnevamo, da se vezja v resnici ne razlikujejo, ampak so navedene vrednosti v članku posledica napake pri štetju. Razširitev na multiplekser 16:1 kaže, da je hierarhični pristop uporaben tudi pri večjih vezjih, saj lahko iste gradnike večkrat uporabimo, cena pa je rast števila celic, površine in zakasnitve. Pri tem ne smemo zanemariti, da smo rezultate primerjali le glede števila celic, površine in zakasnitve, energijske disipacije pa nismo analizirali.
 % \section*{Izjava o uporabi generativne umetne inteligence}
 % [ ]
 
