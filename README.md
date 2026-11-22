@@ -36,8 +36,9 @@ The 16:1 multiplexer is our own extension.
 
 ## How to simulate
 1. Open a `.qca` file in QCADesigner-E.
-2. Go to Simulation > Simulation Type Setup and choose [coherence vector / bistable approximation].
-3. Set the parameters. Reference values from the paper: cell 18 × 18 nm, cell spacing 2 nm, radius of effect 80 nm, clock high 9.8e-22 J, clock low 3.8e-23 J, relative permittivity 12.9, temperature 1 K. Ours: [].
+2. Go to Simulation > Simulation Type Setup and choose **coherence vector** (QCADesigner-E energy simulation, as in the paper).
+3. Set the parameters. Reference values from the paper: cell 18 × 18 nm, cell spacing 2 nm, radius of effect 80 nm, clock high 9.8e-22 J, clock low 3.8e-23 J, relative permittivity 12.9, layer separation 11.5 nm, temperature 1 K, relaxation time 1e-15 s, time step 1e-16 s, Gaussian clock, clock period and input period 1e-9 s, clock slope 1e-10 s, total simulation time 8e-9 s.
+   Ours: the same values for the energy runs. For the function and delay checks we used a faster clock to keep runs short: clock period and input period 4e-12 s, clock slope 1e-12 s, total simulation time 5e-11 s, everything else unchanged (Euler method, Gaussian clock, randomized simulation order, zeroing of inputs on).
 4. Create input vectors covering every select combination, then run the simulation.
 5. Compare the output waveform with the truth table, allowing for the clock delay.
 
@@ -47,16 +48,25 @@ Metrics: number of cells, area, clock delay.
 | Circuit | Cells | Area (µm²) | Delay (clock cycles) | Source |
 |---|---|---|---|---|
 | 2:1 | 56 | 0.09 | 1 | paper |
-| 2:1 | [ ] | [ ] | [ ] | ours |
+| 2:1 | 56 | 0.09 | 1 | ours |
 | 4:1 | 213 | 0.46 | 3 | paper |
-| 4:1 | [ ] | [ ] | [ ] | ours |
+| 4:1 | 204 | 0.42 | 3 | ours |
 | 8:1 | 646 | 1.36 | 5.5 | paper |
-| 8:1 | [ ] | [ ] | [ ] | ours |
+| 8:1 | 618 | 1.30 | 5.5 | ours |
 | 16:1 | n/a | n/a | n/a | paper |
-| 16:1 | [ ] | [ ] | [ ] | ours |
+| 16:1 | 1679 | 4.10 | 11.25 | ours |
 
-Does each design work in simulation? 
--todo
+> Note: the paper states 213 cells (4:1) and 646 cells (8:1), with areas of 0.46 and 1.36 µm². A recount of the layouts shown in the paper gives 204 and 618 cells, which agrees with our circuits.
+
+## Does each design work in simulation?
+Yes. All four circuits were simulated in QCADesigner-E and the output matches the truth table for every select combination, allowing for the clock delay.
+
+| Circuit | Truth table verified | Notes |
+|---|---|---|
+| 2:1 | yes | all 8 combinations of S0, A, B match Mux = S0 ? B : A, delay 1 cycle |
+| 4:1 | yes | all 4 select combinations (S1S0 = 00 to 11) give A to D, delay 3 cycles |
+| 8:1 | yes | all 8 select combinations (S2S1S0 = 000 to 111) give A to H, delay 5.5 cycles |
+| 16:1 | yes | all 16 select combinations (S3S2S1S0 = 0000 to 1111) give A to P, delay 11.25 cycles |
 
 ## Authors
 Strahinja Đorđević, Alja Eremić, Simona Cholakova
